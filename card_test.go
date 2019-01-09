@@ -18,3 +18,17 @@ func TestDefaultSort(t *testing.T)  {
 		t.Error("Expected the first card is Ace of Spade, received:", cards[0])
 	}
 }
+
+func TestSort(t *testing.T) {
+	cards := NewDeck(Sort(Less))
+	expected := Card{Rank: Ace, Suit: Spade}
+	if cards[0] != expected {
+		t.Error("Expected the first card is Ace of Spade, received:", cards[0])
+	}
+
+	cards = NewDeck(Sort(Greater))
+	expected = Card{Rank: King, Suit: Heart}
+	if cards[0] != expected {
+		t.Error("Expected the first card is King of Heart, received:", cards[0])
+	}
+}

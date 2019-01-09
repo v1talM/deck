@@ -52,7 +52,7 @@ func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
 	}
-	return fmt.Sprintf("%s of %ss", c.Suit.String(), c.Rank.String())
+	return fmt.Sprintf("%s of %ss", c.Rank.String(), c.Suit.String())
 }
 
 func NewDeck(opts ...func([]Card) []Card) []Card {
@@ -73,9 +73,22 @@ func defaultSort(cards []Card) []Card {
 	return cards
 }
 
+func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		sort.Slice(cards, less(cards))
+		return cards
+	}
+}
+
 func Less(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) < absRank(cards[j])
+	}
+}
+
+func Greater(cards []Card) func(i, j int) bool {
+	return func(i, j int) bool {
+		return absRank(cards[i]) > absRank(cards[j])
 	}
 }
 
