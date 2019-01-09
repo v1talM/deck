@@ -1,7 +1,10 @@
 // go generate stringer --type=Suit,Rank
 package blackjack
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type Suit uint8
 type Rank uint8
@@ -52,12 +55,30 @@ func (c Card) String() string {
 	return fmt.Sprintf("%s of %ss", c.Suit.String(), c.Rank.String())
 }
 
-func NewDeck() []Card {
+func NewDeck(opts ...func([]Card) []Card) []Card {
 	var cards Deck
 	for _, suit := range Suits {
 		for i := MinRank; i <= MaxRank; i++ {
 			cards = append(cards, Card{suit, i})
 		}
 	}
+	for _, opt := range opts {
+		opt(cards)
+	}
 	return cards
+}
+
+func defaultSort(cards []Card) []Card {
+	sort.Slice(cards, Less(cards))
+	return cards
+}
+
+func Less(cards []Card) func(i, j int) bool {
+	return func(i, j int) bool {
+		return absRank(cards[i]) < absRank(cards[j])
+	}
+}
+
+func absRank(c Card) int {
+	return int(c.Suit) * int(MaxRank) + int(c.Rank)
 }
