@@ -105,6 +105,18 @@ func HaveJokers(number int) func([]Card) []Card {
 	}
 }
 
+func Filter(fn func(card Card) bool) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		var ret []Card
+		for _, c := range cards {
+			if !fn(c) {
+				ret = append(ret, c)
+			}
+		}
+		return ret
+	}
+}
+
 func Less(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) < absRank(cards[j])

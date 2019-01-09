@@ -46,3 +46,15 @@ func TestHaveJokers(t *testing.T) {
 		t.Error("Expected 0 jokers, received:", cnt)
 	}
 }
+
+func TestFilter(t *testing.T) {
+	fn := func(card Card) bool {
+		return card.Rank == Two || card.Rank == Three
+	}
+	cards := NewDeck(Filter(fn))
+	for _, c := range cards {
+		if c.Rank == Two || c.Rank == Three {
+			t.Error("Unexpected rank should be filtered out")
+		}
+	}
+}
