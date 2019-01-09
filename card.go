@@ -70,11 +70,13 @@ func NewDeck(opts ...func([]Card) []Card) []Card {
 	return cards
 }
 
+// 默认排序
 func defaultSort(cards []Card) []Card {
 	sort.Slice(cards, Less(cards))
 	return cards
 }
 
+// 根据指定方式排序
 func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
 	return func(cards []Card) []Card {
 		sort.Slice(cards, less(cards))
@@ -82,6 +84,7 @@ func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
 	}
 }
 
+// 打乱顺序
 func Shuffle(cards []Card) []Card {
 	var ret = make([]Card, len(cards))
 	r := rand.New(rand.NewSource(time.Now().Unix()))
@@ -92,6 +95,7 @@ func Shuffle(cards []Card) []Card {
 	return ret
 }
 
+// 有n张joker
 func HaveJokers(number int) func([]Card) []Card {
 	return func(cards []Card) []Card {
 		for i := 0; i < number; i++ {
@@ -105,6 +109,7 @@ func HaveJokers(number int) func([]Card) []Card {
 	}
 }
 
+// 过滤掉指定牌
 func Filter(fn func(card Card) bool) func([]Card) []Card {
 	return func(cards []Card) []Card {
 		var ret []Card
@@ -117,12 +122,14 @@ func Filter(fn func(card Card) bool) func([]Card) []Card {
 	}
 }
 
+// 从小到大排序
 func Less(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) < absRank(cards[j])
 	}
 }
 
+// 从大到小排序
 func Greater(cards []Card) func(i, j int) bool {
 	return func(i, j int) bool {
 		return absRank(cards[i]) > absRank(cards[j])
