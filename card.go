@@ -58,14 +58,14 @@ func (c Card) String() string {
 }
 
 func NewDeck(opts ...func([]Card) []Card) []Card {
-	var cards Deck
+	var cards []Card
 	for _, suit := range Suits {
-		for i := MinRank; i <= MaxRank; i++ {
-			cards = append(cards, Card{suit, i})
+		for rank := MinRank; rank  <= MaxRank; rank ++ {
+			cards = append(cards, Card{suit, rank })
 		}
 	}
 	for _, opt := range opts {
-		opt(cards)
+		cards = opt(cards)
 	}
 	return cards
 }
@@ -90,6 +90,19 @@ func Shuffle(cards []Card) []Card {
 		ret[i] = cards[j]
 	}
 	return ret
+}
+
+func HaveJokers(number int) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		for i := 0; i < number; i++ {
+			j := Card{
+				Rank: Rank(i),
+				Suit: Joker,
+			}
+			cards = append(cards, j)
+		}
+		return cards
+	}
 }
 
 func Less(cards []Card) func(i, j int) bool {
