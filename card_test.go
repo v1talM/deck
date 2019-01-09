@@ -1,10 +1,12 @@
 package blackjack
 
-import "fmt"
+import (
+	"testing"
+)
 
-func ExampleCard()  {
-	fmt.Println(Card{Rank: Ace, Suit: Diamond})
-
-	// output:
-	// Diamond of Aces
+func TestNewDeck(t *testing.T) {
+	cards := NewDeck()
+	if len(cards) != 13 * 4 {
+		t.Error("Wrong number of cards")
+	}
 }
