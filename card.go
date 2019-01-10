@@ -46,7 +46,6 @@ type Card struct {
 	Rank
 }
 
-type Deck []Card
 
 var Suits = [...]Suit{Spade, Diamond, Club, Heart}
 
@@ -68,6 +67,16 @@ func NewDeck(opts ...func([]Card) []Card) []Card {
 		cards = opt(cards)
 	}
 	return cards
+}
+
+func Deck(n int) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		var ret []Card
+		for i := 0; i < n; i++ {
+			ret = append(ret, cards...)
+		}
+		return ret
+	}
 }
 
 // 默认排序
